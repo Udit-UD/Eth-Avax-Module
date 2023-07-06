@@ -2,23 +2,27 @@
 pragma solidity ^0.8.17;
 
 contract ErrorHandling {
-    uint temp = 10;
-    
-    function testAssert(uint x) public pure{
-        assert(x != 0);
+    int initBalance = 10000;
 
-    }
+    function withdraw(int amount) public returns (int) {
+        assert(amount > 0);
 
-    function div(uint x, uint y) public pure returns (uint){
-        if(y == 0){
-            revert("Denominator can't be zero");
+        if(amount > initBalance){
+            revert("Amount must be less than initial balance!");
         }
-        return x/y;
+        initBalance -= amount;
+        return initBalance;
     }
 
-    function multiplication(uint x) public view returns (uint) {
-        require(x < 10, "Value should be less than 10!");
-        return x * temp;
+    function depositBalance(int amount) public returns (int){
+        require(amount >= 0, "Value should be greater than 0");
+        initBalance += amount;
+        return initBalance;
     }
+
+    function viewBalance() public view returns(int){
+        return initBalance;
+    }
+
 }
 
